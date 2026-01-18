@@ -1,0 +1,118 @@
+<script>
+const UNIQUE_CODE = "T5C003495";
+const REVEAL_INTERVAL = 400;
+const AUTO_HIDE_MS = 120000;
+
+/* 🔴 Inject blinking red style once */
+(function injectBlinkStyle(){
+  if(document.getElementById("blink-style")) return;
+  const style = document.createElement("style");
+  style.id = "blink-style";
+  style.innerHTML = `
+    .blink-alert{
+      margin:12px 0;
+      padding:12px;
+      background:#ff0000;
+      color:#fff;
+      font-weight:800;
+      text-align:center;
+      border-radius:8px;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink{
+      0%{opacity:1}
+      50%{opacity:.3}
+      100%{opacity:1}
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+const TRACK_LINES = [
+  "<b>Status:</b> In Transit",
+  "<b>Origin:</b> South Africa",
+  "<b>Current Location:</b> Cheddi Jagan International Airport",
+  "<b>Destination:</b> Guyana",
+  "<b>Item Quantity:</b> 1",
+  "<b>Weight:</b> 14.2 kg",
+  "<b>Sender Name:</b> Sandra Brown",
+  "<b>Sender Address:</b> Italy, Rome",
+  "<b>Receiver Name:</b> Laksha Bahadur",
+  "<b>Receiver Address:</b> Gurung Lachhya Sulgeneckstrasse 503007 Bern",
+  "<b>Receiver Phone / Email:</b> lachyagurung@gmail.com"
+];
+
+let revealTimers = [];
+let hideTimer = null;
+
+function revealDetails(lines){
+  const details = document.getElementById('details');
+  details.innerHTML = '';
+
+  /* 🔴 Blinking IN TRANSIT alert */
+  const alert = document.createElement("div");
+  alert.className = "blink-alert";
+  alert.textContent = "🚨 SHIPMENT IN TRANSIT";
+  details.appendChild(alert);
+
+  revealTimers.forEach(t => clearTimeout(t));
+  revealTimers = [];
+  let delay = 0;
+
+  lines.forEach(line => {
+    const t = setTimeout(()=>{
+      const div = document.createElement('div');
+      div.className = 'line';
+      div.innerHTML = line;
+      details.appendChild(div);
+      setTimeout(()=> div.classList.add('show'), 40);
+    }, delay);
+    revealTimers.push(t);
+    delay += REVEAL_INTERVAL;
+  });
+}
+
+function trackNow(){
+  const inputEl = document.getElementById('trackInput');
+  const btn = document.getElementById('trackBtn');
+  const loader = document.getElementById('loader');
+  const prog = document.getElementById('progBar');
+  const result = document.getElementById('result');
+  const details = document.getElementById('details');
+
+  const val = (inputEl.value || '').replace(/[^A-Z0-9]/gi,'').toUpperCase();
+  const required = UNIQUE_CODE.replace(/[^A-Z0-9]/gi,'').toUpperCase();
+
+  clearTimeout(hideTimer);
+  revealTimers.forEach(t => clearTimeout(t));
+  revealTimers = [];
+  details.innerHTML = '';
+  result.style.display = 'none';
+
+  inputEl.disabled = true; 
+  btn.disabled = true;
+  loader.style.display = 'block';
+  prog.style.width = '0%';
+  prog.style.transition = 'width 2000ms linear';
+  setTimeout(()=> prog.style.width = '100%', 20);
+
+  setTimeout(()=>{
+    loader.style.display = 'none';
+    inputEl.disabled = false; 
+    btn.disabled = false;
+
+    if(val === required){
+      result.style.display = 'block';
+      revealDetails(TRACK_LINES);
+
+      hideTimer = setTimeout(()=>{
+        details.innerHTML = '';
+        result.style.display = 'none';
+      }, AUTO_HIDE_MS);
+    } else {
+      result.style.display = 'block';
+      details.innerHTML = '<div class="line show">❌ Invalid Tracking Number</div>';
+    }
+  }, 2000);
+}
+</script>
