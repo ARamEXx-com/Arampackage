@@ -2,76 +2,114 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tracking Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Tracking</title>
 
 <style>
 body{
   margin:0;
   font-family:Arial, sans-serif;
-  background:#8b0000;
+  background:#6e0000;
   color:#fff;
 }
 .container{
-  max-width:600px;
-  margin:40px auto;
-  padding:20px;
-  background:rgba(0,0,0,.3);
+  max-width:900px;
+  margin:20px auto;
+  padding:16px;
+}
+.logo{
+  text-align:center;
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+.card{
+  background:rgba(0,0,0,.25);
+  padding:18px;
   border-radius:12px;
+  margin-top:16px;
 }
 input,button{
   width:100%;
   padding:12px;
-  margin-top:10px;
   border-radius:8px;
   border:none;
+  margin-top:10px;
 }
 button{
-  font-weight:bold;
+  background:#000;
+  color:#fff;
+  font-weight:700;
 }
-.result{display:none;margin-top:20px}
+.result{
+  display:none;
+  margin-top:16px;
+}
+.line{
+  margin:6px 0;
+}
 .blink{
-  background:red;
+  margin-top:12px;
   padding:12px;
+  background:#ff0000;
   border-radius:8px;
   text-align:center;
-  font-weight:800;
+  font-weight:900;
   animation:blink 1s infinite;
 }
 @keyframes blink{
-  0%{opacity:1}
   50%{opacity:.3}
-  100%{opacity:1}
+}
+.notice{
+  margin-top:14px;
+  font-size:13px;
+  opacity:.85;
+  text-align:center;
 }
 </style>
 </head>
 
 <body>
 <div class="container">
-  <h2>Enter Tracking Code</h2>
-  <input id="code" placeholder="Tracking code">
-  <button onclick="track()">TRACK</button>
+  <div class="logo">ARAMEX TRACKING</div>
 
-  <div class="result" id="result">
-    <p><b>Status:</b> In Transit</p>
-    <div class="blink">🚨 IN TRANSIT</div>
+  <div class="card">
+    <h3>Enter Tracking Code</h3>
+    <input id="code" placeholder="Enter Tracking code">
+    <button onclick="track()">TRACK</button>
+
+    <div class="result" id="result">
+      <h3>Shipment Details</h3>
+
+      <div class="line"><b>Status:</b> IN TRANSIT</div>
+
+      <div class="line"><b>Receiver Name:</b> Laksha Bahadur</div>
+      <div class="line"><b>Receiver Address:</b> Gurung Lachhya Sulgeneckstrasse 503007 Bern</div>
+      <div class="line"><b>Receiver Contact:</b> lachyagurung@gmail.com</div>
+
+      <div class="line"><b>Sender Name:</b> Sandra Brown</div>
+      <div class="line"><b>Sender Address:</b> Italy, Rome</div>
+
+      <div class="blink">⚠️ ARAMEX / TRACK RECORD ⚠️</div>
+
+      <div class="notice">
+        This page is a Aramex official only.  
+        real shipment, courier,  tracking.
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-const CODE = "T5C003495";
+const REAL_CODE = "DEMO123";
 
 function track(){
-  const val = document.getElementById("code").value.trim().toUpperCase();
-  const result = document.getElementById("result");
-
-  result.style.display = "none";
-
-  if(val === CODE){
-    result.style.display = "block";
-  } else {
+  const val = code.value.trim().toUpperCase();
+  if(val !== DEMO_CODE){
     alert("Invalid tracking code");
+    return;
   }
+  result.style.display = "block";
 }
 </script>
 </body>
